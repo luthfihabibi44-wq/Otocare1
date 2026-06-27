@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Analisis - OtoCare</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #fafafa; color: #111111; letter-spacing: -0.01em; }
+        .navbar-clean { background: #ffffff; border-bottom: 1px solid #eaeaea; }
+        .panel-card { background: #ffffff; border: 1px solid #eaeaea; border-radius: 12px; padding: 28px; margin-bottom: 24px; }
+        .sector-grid-card { background: #ffffff; border: 1px solid #eaeaea; border-radius: 12px; padding: 20px; height: 100%; transition: border-color 0.2s ease; }
+        .sector-grid-card:hover { border-color: #b5b5b5; }
+        .progress-track { height: 4px; background-color: #f0f0f0; border-radius: 2px; overflow: hidden; margin: 16px 0; }
+        .status-dot { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.85rem; padding: 6px 12px; border-radius: 20px; }
+        .dot-success { background: #e6f4ea; color: #137333; }
+        .dot-warning { background: #fef7e0; color: #b06000; }
+        .dot-danger { background: #fce8e6; color: #c5221f; }
+        .meta-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #666666; font-weight: 600; margin-bottom: 4px; }
+        .info-note { background: #f7f7f7; border-radius: 8px; padding: 12px 16px; font-size: 0.825rem; color: #555555; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-clean py-3 mb-4">
+        <div class="container">
+            <a href="armada.html" class="text-decoration-none text-dark small fw-medium"><i class="bi bi-arrow-left me-2"></i> Kembali ke Dashboard Utama</a>
+            <span class="text-muted small fw-semibold text-uppercase tracking-wider">OtoCare Core Engine</span>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 1000px;">
+        <div class="panel-card">
+            <div class="row align-items-center g-3">
+                <div class="col-md-8">
+                    <span class="meta-label d-block">Identifikasi Unit</span>
+                    <h3 class="fw-bold mb-3 text-dark" id="txtNama">--</h3>
+                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                        <span class="badge bg-dark px-2.5 py-1.5" style="border-radius: 6px;" id="txtPlat">--</span>
+                        <span class="badge bg-light text-secondary border px-2.5 py-1.5" style="border-radius: 6px;" id="txtJenis">--</span>
+                        <span class="text-muted small ms-2"><i class="bi bi-speedometer2 me-1"></i> Odometer: <b id="txtKm">-- KM</b></span>
+                    </div>
+                </div>
+                <div class="col-md-4 text-md-end" id="boxStatus">
+                     <!-- Diisi Dinamis -->
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-card" style="border-left: 4px solid #111111;">
+            <div class="d-flex align-items-center gap-2 mb-3"><i class="bi bi-layers text-dark fs-5"></i><h6 class="fw-bold m-0 text-dark">Rangkuman Log Perbaikan Sistem</h6></div>
+            <div class="text-secondary" style="line-height: 1.7; font-size: 0.925rem;" id="txtSummary"></div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4 mt-5">
+            <h6 class="text-uppercase tracking-wider fw-bold text-muted small m-0">Matriks Telemetri Sektor</h6>
+            <span class="text-muted small" style="font-size: 0.8rem;">Ambang batas dinamis dihitung otomatis</span>
+        </div>
+
+        <div class="row g-3 mb-5">
+            <!-- S1: Oli -->
+            <div class="col-md-6"><div class="sector-grid-card"><div class="d-flex justify-content-between align-items-start"><div class="fw-semibold text-dark"><i class="bi bi-droplet text-danger me-2"></i>Sektor Pelumasan</div><span class="badge bg-light text-dark border font-monospace small">S1</span></div><div class="row g-2 my-3"><div class="col-6"><span class="meta-label d-block">Durasi Kalender</span><span class="fw-semibold text-dark" id="s_h_oli">0 Hari</span></div><div class="col-6"><span class="meta-label d-block">Jarak Tempuh</span><span class="fw-semibold text-dark" id="s_k_oli">0 KM</span></div></div><div class="progress-track"><div class="bg-danger" style="height:100%; width:0%" id="p_oli"></div></div><div class="info-note"><span class="fw-medium text-dark d-block mb-0.5">Indikasi Fisik Aus:</span>Resonansi setang meningkat, degradasi performa termal, noise mekanis di silinder.</div></div></div>
+            <!-- S2: Mesin -->
+            <div class="col-md-6"><div class="sector-grid-card"><div class="d-flex justify-content-between align-items-start"><div class="fw-semibold text-dark"><i class="bi bi-cpu text-primary me-2"></i>Mesin & Pengapian</div><span class="badge bg-light text-dark border font-monospace small">S2</span></div><div class="row g-2 my-3"><div class="col-6"><span class="meta-label d-block">Durasi Kalender</span><span class="fw-semibold text-dark" id="s_h_mesin">0 Hari</span></div><div class="col-6"><span class="meta-label d-block">Jarak Tempuh</span><span class="fw-semibold text-dark" id="s_k_mesin">0 KM</span></div></div><div class="progress-track"><div class="bg-primary" style="height:100%; width:0%" id="p_mesin"></div></div><div class="info-note"><span class="fw-medium text-dark d-block mb-0.5">Indikasi Fisik Aus:</span>Anomali siklus stasioner, hambatan akselerasi linier, efisiensi bahan bakar menurun.</div></div></div>
+            <!-- S3: Transmisi -->
+            <div class="col-md-6"><div class="sector-grid-card"><div class="d-flex justify-content-between align-items-start"><div class="fw-semibold text-dark"><i class="bi bi-gear text-warning me-2"></i>Komponen Transmisi</div><span class="badge bg-light text-dark border font-monospace small">S3</span></div><div class="row g-2 my-3"><div class="col-6"><span class="meta-label d-block">Durasi Kalender</span><span class="fw-semibold text-dark" id="s_h_cvt">0 Hari</span></div><div class="col-6"><span class="meta-label d-block">Jarak Tempuh</span><span class="fw-semibold text-dark" id="s_k_cvt">0 KM</span></div></div><div class="progress-track"><div class="bg-warning" style="height:100%; width:0%" id="p_cvt"></div></div><div class="info-note"><span class="fw-medium text-dark d-block mb-0.5">Indikasi Fisik Aus:</span>Gejala friksi/vibrasi berlebih pada rotasi awal, kendala ketegangan rantai/belt.</div></div></div>
+            <!-- S4: Rem -->
+            <div class="col-md-6"><div class="sector-grid-card"><div class="d-flex justify-content-between align-items-start"><div class="fw-semibold text-dark"><i class="bi bi-shield-shaded text-success me-2"></i>Sistem Pengendalian & Rem</div><span class="badge bg-light text-dark border font-monospace small">S4</span></div><div class="row g-2 my-3"><div class="col-6"><span class="meta-label d-block">Durasi Kalender</span><span class="fw-semibold text-dark" id="s_h_kaki">0 Hari</span></div><div class="col-6"><span class="meta-label d-block">Jarak Tempuh</span><span class="fw-semibold text-dark" id="s_k_kaki">0 KM</span></div></div><div class="progress-track"><div class="bg-success" style="height:100%; width:0%" id="p_kaki"></div></div><div class="info-note"><span class="fw-medium text-dark d-block mb-0.5">Indikasi Fisik Aus:</span>Tekanan tuas rem melunak (kenyal), efisiensi pengereman menurun akibat saturasi air.</div></div></div>
+            <!-- S5: Kelistrikan -->
+            <div class="col-md-6"><div class="sector-grid-card"><div class="d-flex justify-content-between align-items-start"><div class="fw-semibold text-dark"><i class="bi bi-lightning text-info me-2"></i>Sistem Elektrikal & Aki</div><span class="badge bg-light text-dark border font-monospace small">S5</span></div><div class="row g-2 my-3"><div class="col-6"><span class="meta-label d-block">Durasi Kalender</span><span class="fw-semibold text-dark" id="s_h_lis">0 Hari</span></div><div class="col-6"><span class="meta-label d-block">Jarak Tempuh</span><span class="fw-semibold text-dark" id="s_k_lis">0 KM</span></div></div><div class="progress-track"><div class="bg-info" style="height:100%; width:0%" id="p_listrik"></div></div><div class="info-note"><span class="fw-medium text-dark d-block mb-0.5">Indikasi Fisik Aus:</span>Interval starter motor melemah, fluktuasi intensitas lampu utama, klakson parau.</div></div></div>
+        </div>
+    </div>
+
+<script>
+    function hitungHari(tglStr) {
+        const selisihMs = new Date() - new Date(tglStr);
+        return Math.max(0, Math.floor(selisihMs / (1000 * 60 * 60 * 24)));
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const motorId = parseInt(urlParams.get('id'));
+    const kendaraanList = JSON.parse(localStorage.getItem('kendaraan')) || [];
+    const motor = kendaraanList.find(m => m.id === motorId);
+
+    if (motor) {
+        document.getElementById('txtNama').innerText = motor.nama;
+        document.getElementById('txtPlat').innerText = motor.plat;
+        document.getElementById('txtJenis').innerText = "Tipe Transmisi: " + motor.jenis;
+        document.getElementById('txtKm').innerText = motor.km_sekarang + " KM";
+
+        const km_skrg = motor.km_sekarang;
+
+        const s_hari_oli = hitungHari(motor.tgl_oli);
+        const s_km_oli = Math.max(0, km_skrg - motor.km_oli);
+        document.getElementById('s_h_oli').innerText = s_hari_oli + " Hari";
+        document.getElementById('s_k_oli').innerText = s_km_oli + " KM";
+
+        const s_hari_mesin = hitungHari(motor.tgl_mesin);
+        const s_km_mesin = Math.max(0, km_skrg - motor.km_mesin);
+        document.getElementById('s_h_mesin').innerText = s_hari_mesin + " Hari";
+        document.getElementById('s_k_mesin').innerText = s_km_mesin + " KM";
+
+        const s_hari_cvt = hitungHari(motor.tgl_cvt);
+        const s_km_cvt = Math.max(0, km_skrg - motor.km_cvt);
+        document.getElementById('s_h_cvt').innerText = s_hari_cvt + " Hari";
+        document.getElementById('s_k_cvt').innerText = s_km_cvt + " KM";
+
+        const s_hari_kaki = hitungHari(motor.tgl_kaki);
+        const s_km_kaki = Math.max(0, km_skrg - motor.km_kaki);
+        document.getElementById('s_h_kaki').innerText = s_hari_kaki + " Hari";
+        document.getElementById('s_k_kaki').innerText = s_km_kaki + " KM";
+
+        const s_hari_listrik = hitungHari(motor.tgl_listrik);
+        const s_km_listrik = Math.max(0, km_skrg - motor.km_listrik);
+        document.getElementById('s_h_lis').innerText = s_hari_listrik + " Hari";
+        document.getElementById('s_k_lis').innerText = s_km_listrik + " KM";
+
+        let nama_transmisi = "Sektor Transmisi (Rantai & Kopling)";
+        let lim_h_trans = 150; let lim_k_trans = 12000;
+        if (motor.jenis === 'Matic') {
+            nama_transmisi = "Sektor Transmisi (CVT & Gardan)";
+            lim_h_trans = 120; lim_k_trans = 10000;
+        }
+
+        document.getElementById('p_oli').style.width = Math.min(100, (s_km_oli / 2000) * 100) + '%';
+        document.getElementById('p_mesin').style.width = Math.min(100, (s_km_mesin / 6000) * 100) + '%';
+        document.getElementById('p_cvt').style.width = Math.min(100, (s_km_cvt / lim_k_trans) * 100) + '%';
+        document.getElementById('p_kaki').style.width = Math.min(100, (s_km_kaki / 8000) * 100) + '%';
+        document.getElementById('p_listrik').style.width = Math.min(100, (s_km_listrik / 15000) * 100) + '%';
+
+        const perlu_oli = s_hari_oli > 60 || s_km_oli > 2000;
+        const perlu_mesin = s_hari_mesin > 120 || s_km_mesin > 6000;
+        const perlu_transmisi = s_hari_cvt > lim_h_trans || s_km_cvt > lim_k_trans;
+        const perlu_kaki = s_hari_kaki > 90 || s_km_kaki > 8000;
+        const perlu_listrik = s_hari_listrik > 180 || s_km_listrik > 15000;
+
+        let sektor_bermasalah = [];
+        if (perlu_oli) sektor_bermasalah.push("⚠️ <b>Sektor Pelumasan (Oli Mesin)</b>: Sudah melewati ambang batas efisiensi penggantian berkala (Ambang batas: 2.000 KM / 60 Hari).");
+        if (perlu_mesin) sektor_bermasalah.push("⚠️ <b>Sektor Mesin & Pengapian (Tune-Up)</b>: Penumpukan karbon ruang bakar diindikasikan tinggi, butuh pembersihan komponen throttle body.");
+        if (perlu_transmisi) sektor_bermasalah.push(`⚠️ <b>${nama_transmisi}</b>: Batas keausan operasional komponen penggerak terlampaui. Risiko terjadi selip friksi atau anomali mekanis.`);
+        if (perlu_kaki) sektor_bermasalah.push("⚠️ <b>Sistem Pengendalian & Rem</b>: Terdeteksi penurunan viskositas minyak rem atau keausan material gesek (kampas), inspeksi keamanan wajib dilakukan.");
+        if (perlu_listrik) sektor_bermasalah.push("⚠️ <b>Sistem Elektrikal & Aki</b>: Umur pakai cadangan daya sistem kelistrikan memasuki fase rawan penurunan tegangan konstan.");
+
+        const boxStatus = document.getElementById('boxStatus');
+        if (sektor_bermasalah.length === 0) {
+            boxStatus.innerHTML = `<span class="status-dot dot-success"><i class="bi bi-check-circle-fill"></i> Sistem Prima</span>`;
+            document.getElementById('txtSummary').innerHTML = "Seluruh parameter matriks telemetri operasional unit terpantau dalam kondisi optimal. Tidak ditemukan anomali mekanis maupun komponen yang melewati siklus ambang batas servis untuk saat ini.";
+        } else {
+            if ((s_hari_oli > 90 || s_km_oli > 3500) || (perlu_transmisi && s_km_cvt > (lim_k_trans + 3000))) {
+                boxStatus.innerHTML = `<span class="status-dot dot-danger"><i class="bi bi-x-circle-fill"></i> Tindakan Kritis</span>`;
+            } else {
+                boxStatus.innerHTML = `<span class="status-dot dot-warning"><i class="bi bi-exclamation-triangle-fill"></i> Perlu Atensi</span>`;
+            }
+            document.getElementById('txtSummary').innerHTML = "Analisis komparasi algoritma mendeteksi penyimpangan efisiensi komponen akibat batas pakai. <b>Berikut daftar sektor operasional utama yang direkomendasikan untuk segera dilakukan tindakan perawatan mekanis:</b><br><br>" + sektor_bermasalah.join("<br>");
+        }
+    }
+</script>
+</body>
+</html>
